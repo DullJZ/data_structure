@@ -56,6 +56,7 @@ int LocateList(SqList L, ElemType e){
 		}
 	}
 	return 0;
+}
 
 Status ListInsert(SqList &L, int i, ElemType e){
 	// 在L中的第i个位置之前插入新的数据元素e，1≤i≤L.length+1。
@@ -63,6 +64,41 @@ Status ListInsert(SqList &L, int i, ElemType e){
 		L.elem[i0]=L.elem[i0-1];
 	}
 	L.elem[i-1]=e;
+	L.length++;
 	return OK;
 }
 
+Status ListDelete(SqList &L, int i, ElemType &e ){
+	//删除L中的第i个数据元素，用e返回其值，1≤i≤L.length。
+	e=L.elem[i-1];
+	for (int i0=i-1;i0<L.length-1;i0++){
+		L.elem[i0]=L.elem[i0+1];
+	}
+	L.length--;
+	return OK;
+}
+
+Status ListTraverse(SqList L){
+	//利用printf函数依次输出L的每个数据元素的值。
+	for (int i=0;i<L.length;i++){
+		printf("%d ",L.elem[i]);
+	}
+	return OK;
+}
+
+
+
+//用于测试函数
+int main(){
+	SqList L;
+	InitList(L);
+	L.elem[0]=3;
+	L.elem[1]=9;
+	L.elem[2]=1;
+	L.length=3;
+	;
+	ListTraverse(L);
+	int e=0;
+	ListDelete(L,2,e);
+	ListTraverse(L);
+}
