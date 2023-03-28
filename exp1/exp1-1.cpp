@@ -83,6 +83,7 @@ Status ListTraverse(SqList L){
 	for (int i=0;i<L.length;i++){
 		printf("%d ",L.elem[i]);
 	}
+	printf("\n");
 	return OK;
 }
 
