@@ -2,3 +2,10 @@
 /exp1/exp1.vcxproj
 /exp1/Debug
 /Debug
+*.obj
+*.tlog
+*.idb
+*.ilk
+*.log
+*.pdb
+*.zip
