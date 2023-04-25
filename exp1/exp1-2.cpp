@@ -99,9 +99,9 @@ int LocateList2(LinkList L, ElemType e) {
 
 Status ListInsert(LinkList& L, int i, ElemType e) {
 	//在L中的第i个数据结点之前插入新的数据结点e，1≤i≤Listlength(L)+1。
-	LNode* p = L->next;
+	LNode* p = L;
 	int j = 1;
-	while (j < i-1) {
+	while (j <= i-1) {
 		p = p->next;
 		j++;
 	}
@@ -128,7 +128,7 @@ Status ListDelete(LinkList& L, int i, ElemType& e) {
 	LNode* q = p->next;
 	e = q->data; 
 	p->next = q->next;
-	free(q);
+	//free(q);
 	return OK;
 }
 
@@ -163,13 +163,14 @@ Status Union(LinkList& La, LinkList Lb) {
 
 Status Intersection(LinkList& La, LinkList Lb) {
 	//交运算 La=La ∩ Lb
-	LNode* pa = La->next;
-	while (pa) {
-		if (!LocateList(Lb, pa->data)) {
+	LNode* p=NULL;
+	p = La->next;
+	while (p) {
+		if (!LocateList(Lb, p->data)) {
 			ElemType t;
-			ListDelete(La, LocateList2(La,pa->data), t);
+			ListDelete(La, LocateList2(La,p->data), t);
 		}
-		pa = pa->next;
+		p = p->next;
 	}
 	return OK;
 }
@@ -178,19 +179,24 @@ Status Difference(LinkList& La, LinkList Lb) {
 	//差运算 La=La - Lb
 	LNode* p = La->next;
 	LNode* q = Lb->next;
-	int i = 1;
 	while (p) {
+		int i = 1;
 		while (q) {
 			if (p->data != q->data) {
 				q = q->next;
 			}
 			else {
-				ListDelete(La, i, p->data);
-				i = 1;
+				int tmp = 0;
+				ListDelete(La, i, tmp);
 				break;
 			}
 			i++;
 		}
+		if (p) {
+			break;
+		}
+		p = p->next;			
+		q = Lb->next;
 	}
 	return OK;
 }
@@ -205,21 +211,22 @@ Status MergeList(LinkList La, LinkList Lb, LinkList& Lc) {
 	int i = 1;
 	while (pa && pb) {
 		if (pa->data < pb->data) {
-			pc = pa;
-			pc = pc->next;
+			ListInsert(Lc, i, pa->data);
 			pa = pa->next;
+			i++;
 		}
 		else {
 			if (pa->data > pb->data) {
-				pc = pb;
-				pc = pc->next;
+				ListInsert(Lc, i, pb->data);
 				pb = pb->next;
+				i++;
 			}
 			else {
-				pc = pa;
-				pc = pc->next;
+				ListInsert(Lc, i, pa->data);
+				ListInsert(Lc, i, pb->data);
 				pa = pa->next;
 				pb = pb->next;
+				i += 2;
 			}
 		}
 	}
@@ -288,6 +295,10 @@ int main() {
 	Lb->next = NULL;
 	InitTestLaLb(La, Lb);
 	LinkList Lc = (LinkList)malloc(sizeof(LNode));
+	if (!Lc) {
+		return OVERFLOW;
+	}
+	Lc->next = NULL;
 	printf("La = ");
 	ListTraverse(La);
 	printf("Lb = ");
