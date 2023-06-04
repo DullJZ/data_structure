@@ -15,16 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="exp3-1.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="exp3-3.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="exp3-2.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-    <ClCompile Include="exp3-4.cpp">
+    <ClCompile Include="exp4-1.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

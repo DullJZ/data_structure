@@ -116,8 +116,8 @@ Status CreateMGraph(GraphKind GKind, MGraph& G, int vexnum, int arcnum, char* ve
 		}
 		break;
 	}
-	return OK;
 	}
+	return OK;
 }
 
 Status OutMGraph(MGraph G) {
@@ -149,7 +149,7 @@ Status OutMGraph(MGraph G) {
 		printf("ÁÚ½Ó¾ØÕó£º\n");
 		for (int i = 0; i < G.vexnum; i++) {
 			for (int j = 0; j < G.vexnum; j++) {
-				printf("%d ", G.arcs[i][j].adj);
+				printf("%-5d ", G.arcs[i][j].adj);
 			}
 			printf("\n");
 		}
@@ -182,7 +182,7 @@ Status OutMGraph(MGraph G) {
 		printf("ÁÚ½Ó¾ØÕó£º\n");
 		for (int i = 0; i < G.vexnum; i++) {
 			for (int j = 0; j < G.vexnum; j++) {
-				printf("%d ", G.arcs[i][j].adj);
+				printf("%-5d ", G.arcs[i][j].adj);
 			}
 			printf("\n");
 		}
