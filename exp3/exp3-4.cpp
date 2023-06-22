@@ -206,7 +206,7 @@ Status OutMGraph(MGraph G) {
 int Min(MGraph G)
 {
 	int i, j;
-	int min, loc;
+	int min, loc=0;
 
 	min = INFINITY;
 	for (i = 1; i < G.vexnum; i++)

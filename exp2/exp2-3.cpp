@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -75,8 +76,8 @@ Status CreatHTree(HTree& HT, int n) {
 	int s1, s2, i;
 	for (i = n; i < m; i++) {
 		Select(HT, i, s1, s2);
-		HT[s1].parent = i+1;
-		HT[s2].parent = i+1;
+		HT[s1].parent = i + 1;
+		HT[s2].parent = i + 1;
 		HT[i + 1].lchild = s1;
 		HT[i + 1].rchild = s2;
 		HT[i + 1].weight = HT[s1].weight + HT[s2].weight;
@@ -87,20 +88,30 @@ Status CreatHTree(HTree& HT, int n) {
 Status HTCoding(HTree HT, HTCode& HC, int n) {
 	/*生成赫夫曼编码HC，其中n是叶子结点数。
 	要求根据生成的赫夫曼树HT，生成n个叶子结点的赫夫曼编码并输出。*/
-	HC = (HTCode)malloc(sizeof(char) * (n + 1));
-	char* cd = (char*)malloc(sizeof(char) * n);
-	if (!cd) {
-		return ERROR;
-	}
-	cd[n - 1] = '\0';
-	int i, start, c, f;
-	
-	for (i = 0; i < n; i++) {
-		start = n - 1;
+	n = 8;
+	HC = (HTCode)malloc(sizeof(HTCode) * n + 1);
+	char* cd = (char*)malloc(sizeof(char) * n);							//申请n个char大小char类型的临时空间，这个临时数组记录每次遍历出来的编码
+	int start = 0, c = 0, f = 0;											//start为cd数组记录下标，c初始为叶子结点下标，而后就是孩子结点的下标，f记录双亲结点的下标
+	cd[n - 1] = '\0';													//这个就是给printf留着的，因为printf不会生成'\0'，如果用puts就不用这句语句了
+	for (int i = 1; i <= n; i++)										//只要叶子结点的编码
+	{
+		start = n - 1;													//这句要赋值n的话，start--要写在判断后方
 		c = i;
-		f = HT[i].parent;
-		
+		f = HT[c].parent;
+		while (f != -1)													//根节点没有双亲
+		{
+			start--;
+			if (HT[f].lchild == c)											//是左孩子就是0，右孩子就为1
+				cd[start] = '0';
+			else
+				cd[start] = '1';
+			c = f; f = HT[c].parent;									//向根结点接近
+		}
+		HC[i] = (char*)malloc(sizeof(char) * (n - start));				//给数组里的数组申请n - start个char大小的char*类型的临时空间
+		strcpy(HC[i], &cd[start]);										//cd里记录的编码给HC的第i个数组
 	}
+	free(cd);															//释放临时空间
+
 	return OK;
 }
 
@@ -116,5 +127,10 @@ int main() {
 	CreatHTree(HT, n);
 	for (int i = 0; i < 2 * n - 1; i++) {
 		printf("%d ", HT[i].weight);
+	}
+	HTCode HTCode1;
+	HTCoding(HT, HTCode1, n);
+	for (int i = 1; i <= n; i++) {
+		printf("%s\n", HTCode1[i]);
 	}
 }

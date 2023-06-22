@@ -114,7 +114,7 @@ Status InOrderTraverse(BiThrTree T) {
 	//按孩子中序遍历线索二叉树（递归），输出每个结点的数据
 	if (T) {
 		if (T->LTag == 0) InOrderTraverse(T->lchild);
-		
+		if (T->data == '@') return 0;
 		// 输出，防止未线索化前报NULL错误
 		if (T->lchild == NULL && T->rchild == NULL) {
 			printf("|%d|^|%c|^|%d|\n", T->LTag, T->data, T->RTag);

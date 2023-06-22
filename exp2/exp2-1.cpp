@@ -113,30 +113,27 @@ Status NRInOrderTraverse(BiTree T){
 //非递归后序遍历二叉树T，要求在遍历过程中输出访问的结点字符的同时，
 //输出结点进栈/出栈的过程和栈中指针所指的结点字符;
 Status NRPostOrderTraverse(BiTree T) {
-	stack<BiTNode>S;
+	stack<BiTNode*>S;
 	BiTNode* p = T;
 	BiTNode* pre = NULL;
 	while (p != NULL || S.size() != 0) {
-		while (p != NULL) {
-			S.push(*p);
+		while (p) {
+			S.push(p);
 			p = p->lchild;
 		}
-		if (p!=NULL) {
-			*p = S.top();
-		}
-		S.pop();
+		p = S.top();
 		if (p->rchild == NULL) {
 			pre = p;
 			printf("%c", p->data);
 			p = p->rchild;
 		}
-		else if (p->lchild == pre) {
+		else if (p->rchild == pre) {
 			pre = p;
 			printf("%c", p->data);
 			p = NULL;
 		}
 		else {
-			S.push(*p);
+			S.push(p);
 			p = p->rchild;
 		}
 	}
@@ -164,7 +161,7 @@ int TNodes(BiTree T, int d) {
 int High(BiTree T) {
 	BiTNode* p = T;
 	BiTree r = NULL;
-	int max = 0;                                     //树高 
+	int max = 0;   //树高 
 	stack<BiTree> s;
 	while (p || !s.empty()){
 		if (p != NULL){
@@ -188,9 +185,35 @@ int High(BiTree T) {
 	return max;
 }
 
+BiTNode* RecursionInsert(BiTNode* node, char data) {
+	if (node == NULL) {
+		node = (BiTNode*)malloc(sizeof(BiTNode));
+		if (!node) {
+			return NULL;
+		}
+		node->data = data;
+		node->lchild = NULL;
+		node->rchild = NULL;
+		return node;
+	}
+
+	if (data < node->data){
+		node->lchild = RecursionInsert(node->lchild, data);
+	}
+	else if (data > node->data){
+		node->rchild = RecursionInsert(node->rchild, data);
+	}
+
+	return node;
+}
+
 //要求根据给定的字符序列（字符不重复），生成一棵二叉树。在二叉树中，左子树所有结点的字符小于根结点的字符，右子树所有结点的字符大于根结点。左右子树也满足这个条件。
 Status CreateBST(BiTree& T, const char* chars) {
-
+	int i = 0;
+	while (chars[i] != '\0') {
+		T = RecursionInsert(T, chars[i]);
+		i++;
+	}
 	return OK;
 }
 
@@ -216,10 +239,21 @@ int main() {
 	NRInOrderTraverse(T);
 	printf_s("\n");
 	printf_s("非递归后序遍历的结果为：");
-	NRPostOrderTraverse(T);
+	PostOrderTraverse(T);
 	printf_s("\n");
 	printf_s("二叉树T度为0的有%d个\n", TNodes(T, 0));
 	printf_s("二叉树T度为1的有%d个\n", TNodes(T, 1));
 	printf_s("二叉树T度为2的有%d个\n", TNodes(T, 2));
+	BiTree T1 = NULL;
+	BiTree T2 = NULL;
+	CreateBST(T1, "DBFCAEG");
+	CreateBST(T2, "ABCDEFG");
+	InOrderTraverse(T1);
+	printf_s("\n");
+	InOrderTraverse(T2);
+	printf_s("\n");
+	printf_s("二叉树T1的高度为%d\n", High(T1));
+	printf_s("二叉树T2的高度为%d\n", High(T2));
+	
 	return 0;
 }
